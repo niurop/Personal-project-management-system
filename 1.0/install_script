@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+project=$(Project)
+version=$(Version)
+
+test "$project" || (echo "No project currently open." && exit 1)
+
+cd "$PROJECTSDIR/$project/$version"
+
+test -x "$PROJECTSDIR/$project/$version/install" && "$PROJECTSDIR/$project/$version/install" $@ && exit $?
+
+test -x "$PROJECTSDIR/$project/install" && "$PROJECTSDIR/$project/install" $@ && exit $?
+
+echo "No installation script found."

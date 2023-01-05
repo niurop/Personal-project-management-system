@@ -1,0 +1,81 @@
+#!/bin/bash
+
+project=$(Project)
+
+if [ "$project" ]; then
+	read -p "What is the new version of the project $project :" version
+	test -d "$PROJECTSDIR/$project/$version" && echo "There allready is a verion $version for project $(Project)." && exit 1
+	
+	mkdir "$PROJECTSDIR/$project/$version"
+	cd "$PROJECTSDIR/$project/$version"
+        
+	yesno "Do You want me to copy files from another version? [Y/N]:"
+	if [ $? -eq 0 ]; then
+		source=$(ls --classify "$PROJECTSDIR/$project" | grep "/$" | sed "s/.$//" | dmenu)
+		if [ -d "$PROJECTSDIR/$project/$source" ]; then
+			ls "$PROJECTSDIR/$project/$source" | xargs -I % cp -R "$PROJECTSDIR/$project/$source/%" .
+		else
+			echo "Version $version does not exists for project $project, I am skipping."
+		fi
+	fi
+
+	yesno "Should I create a readme for this version? [Y/N]:"
+	if [ $? -eq 0 ]; then
+          	touch readme
+	  	if [ -f "../readme" ]; then
+            		yesno "Should I copy a readme from this project readme? [Y/N]:"
+	    		test $? -eq 0 && cat "../readme" > readme
+          	fi
+          yesno "Do You want to edit it? [Y/N]:"
+          test $? -eq 0 && $EDITOR readme 
+	fi
+	
+	yesno "Should I create a init script for this version? [Y/N]:"
+	if [ $? -eq 0 ]; then
+          touch init
+	  chmod +x init
+          yesno "Do You want to edit it? [Y/N]:"
+          test $? -eq 0 && $EDITOR init
+	fi
+	
+	yesno "Should I create a run script for this version? [Y/N]:"
+	if [ $? -eq 0 ]; then
+          touch run
+	  chmod +x run
+          yesno "Do You want to edit it? [Y/N]:"
+          test $? -eq 0 && $EDITOR run
+	fi
+
+	yesno "Should I create a instalation script for this version? [Y/N]:"
+	if [ $? -eq 0 ]; then
+          touch install
+	  chmod +x install
+          yesno "Do You want to edit it? [Y/N]:"
+          test $? -eq 0 && $EDITOR install
+	fi
+	load "$project" "$version"
+else
+	read -p "What is the name of the new project? :" project
+	test -d "$PROJECTSDIR/$project" && echo "There allready is a project named $project." && exit 1
+
+	mkdir "$PROJECTSDIR/$project"
+	cd "$PROJECTSDIR/$project"
+
+	yesno "Should I create a readme for this project? [Y/N]:"
+        if [ $? -eq 0 ]; then
+        	touch readme
+          	yesno "Do You want to edit it? [Y/N]:"
+          	test $? -eq 0 && $EDITOR readme 
+	fi
+
+	yesno "Should I create a init script for this project? [Y/N]:"
+	if [ $? -eq 0 ]; then
+          touch init
+	  chmod +x init
+          yesno "Do You want to edit it? [Y/N]:"
+          test $? -eq 0 && $EDITOR init
+	fi
+
+	Project "$project"
+	new
+fi

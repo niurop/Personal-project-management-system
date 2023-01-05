@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PROJECTSDIR="$HOME/Projects"
+
+test -d "$PROJECTSDIR" || mkdir "$PROJECTSDIR"
+test -d "$PROJECTSDIR/.scripts" || mkdir "$PROJECTSDIR/.scripts"
+cp --recursive * "$PROJECTSDIR/.scripts/"
+mv "$PROJECTSDIR/.scripts/readme_script" "$PROJECTSDIR/.scripts/readme"
+mv "$PROJECTSDIR/.scripts/install_script" "$PROJECTSDIR/.scripts/install"
+mv "$PROJECTSDIR/.scripts/init_script" "$PROJECTSDIR/.scripts/init"
+mv "$PROJECTSDIR/.scripts/run_script" "$PROJECTSDIR/.scripts/run"
+ls "$PROJECTSDIR/.scripts/" | xargs -I % chmod +x "$PROJECTSDIR/.scripts/%"
+chmod -x "$PROJECTSDIR/.scripts/PROJECT"
+chmod -x "$PROJECTSDIR/.scripts/VERSION"
+
+sudo mv "$PROJECTSDIR/.scripts/projects" "/usr/bin/"

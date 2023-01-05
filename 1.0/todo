@@ -1,0 +1,8 @@
+#!/bin/bash
+
+lookfor=${1:-'TODO'}
+
+project=$(Project)
+version=$(Version)
+
+grep --color=always --line-number --initial-tab --with-filename "$lookfor" "$PROJECTSDIR/$project/$version/"*

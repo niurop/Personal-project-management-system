@@ -1,0 +1,8 @@
+#!/bin/bash
+
+project=$(Project)
+version=$(Version)
+
+test "$project" || (echo "No project currently open." && exit 1)
+
+$EDITOR "$PROJECTSDIR/$project/$version"

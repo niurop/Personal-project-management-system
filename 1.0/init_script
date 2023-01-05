@@ -1,0 +1,13 @@
+#!/bin/bash
+
+alias current='cd $PROJECTSDIR/$(Project)/$(Version)'
+alias e='edit'
+alias l='load'
+alias u='unload'
+alias c='current'
+alias d='readme'
+alias r='run'
+alias i='install'
+alias n='new'
+
+# bash -c 'cd "$PROJECTSDIR/Usefullscripts/Symbol-table-to-xkb-translator_v1.0/" && ./run'

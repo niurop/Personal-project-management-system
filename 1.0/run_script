@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+project=$(Project)
+version=$(Version)
+
+test "$project" || (echo "No project currently open." && exit 1)
+
+cd "$PROJECTSDIR/$project/$version"
+
+test -x "$PROJECTSDIR/$project/$version/run" && "$PROJECTSDIR/$project/$version/run" $@ && exit $?
+
+test -x "$PROJECTSDIR/$project/run" && "$PROJECTSDIR/$project/run" $@ && exit $?
+
+echo "No run script found found."

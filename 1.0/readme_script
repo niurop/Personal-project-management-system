@@ -1,0 +1,12 @@
+#!/bin/bash
+
+project=$(Project)
+version=$(Version)
+
+test "$project" || (echo "No project currently open." && exit 1)
+
+test -f "$PROJECTSDIR/$project/$version/readme" && less "$PROJECTSDIR/$project/$version/readme" && exit $?
+
+test -f "$PROJECTSDIR/$project/readme" && less "$PROJECTSDIR/$project/readme" && exit $?
+
+echo "No readme found."

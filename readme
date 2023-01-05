@@ -1,0 +1,58 @@
+Projects is a simple extendable script based system for managing multiple projects and versions mainly on UNIX systems.
+
+Basic file structure: (here $PROJECTSDIR === ~/Projects)
+/usr/bin/projects           - entry point script
+~/Projects                  - main projects folder (config and files)
+~/Projects/scripts          - folder with additional scripts for all projects
+~/Projects/<name>           - folder for a project called <name>
+~/Projects/<name>/<version> - version folder for a project <name>
+
+Basic scripts (they can be modified to include special defaults, but here I outline basic functionality):
+/usr/bin/projects - initialize projects suit.
+  This command will set basic environmental variables.
+  It will also run ~/Projects/scripts/init if it is present.
+
+~/Projects/scripts/load - load a project.
+  0) If evniremental variable $PROJECT is set run ~/Projects/scripts/unload.
+  1) Ask for a project to load (list all project folders in ~/Projects/).
+  2) Cd to ~/Projects/<project> and run <project>/init if exists.
+  3) Ask for a version to load (list all versions in folder ~/Projects/<project>/).
+  4) Cd to ~/Projects/<project>/<version> and run ~/Projects/<project>/<version>/init if exists.
+
+~/Projects/scripts/unload - unload a project.
+  Reset environmental variables $PROJECT and $PROJECTV to "".
+
+~/Projects/scripts/new - create a new project.
+  This command will take You through all steps of creating a new project or new version (if already inside a project).
+  0) If environmental variable $PROJECT is set than go rout B) otherwise A).
+  A.1) Ask for a name and check that the name is not already in use.
+    2) Create folder ~/Projects/<project>.
+    2) Ask if project readme should be created (create one in the <project>/readme with $EDITOR).
+    3) Ask if project init   should be created (create one in the <project>/init  with $EDITOR).
+    4) Ask for initial version number (default 1.0).
+    5) Create folder ~/Projects/<project>/<version>.
+    6) Ask if version readme should be created (create one in the <project>/<version>/redme with $EDITOR).
+    7) Ask if version init   should be created (create one in the <project>/<version>/init  with $EDITOR).
+    8) Execute ~/Projects/scripts/load using <project> <version>.
+  B.1) Ask for new version and check that the version is not in use.
+    2) Create folder ~/Projects/<project>/<version>.
+    3) Ask if contents should be copied from already existing version (recursively copy them if necessary).
+    4) Ask if version readme should be created (create one in the <project>/<version>/redme with $EDITOR).
+    5) Ask if version init   should be created (create one in the <project>/<version>/init  with $EDITOR).
+    6) Execute ~/Projects/scripts/load using <project> <version>.
+
+~/Projects/scripts/readme - less readme
+  Display readme of current project.
+  0) Check if enviremental variable $PROJECT is set.
+  1) Run less ~/Projects/<project>/<version>/readme
+  2) If previous step failed run less ~/Projects/<project>/readme
+
+~/Projects/scripts/install - install current verion of a project
+  If specified how, it will install current version of a project.
+  0) Check if enviremental variables $PROJECT and $PROJECTV are set.
+  1) Run ~/Projects/<project>/<version>/install script (may require root permisions).
+
+Environmental variables used:
+$PATH        - $PROJECTSDIR/scripts will be prepended to $PATH
+$PROJECTSDIR - projects root folder (default ~/Projects)
+$EDITOR      - editor for editing config files (default vim)

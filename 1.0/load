@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [ $# -ge 1 ]; then
+
+	test -d "$PROJECTSDIR/$1" || (echo "No project named $1."; exit 1)
+	project="$1"
+	Project "$project"
+	cd "$PROJECTSDIR"
+	cd "$project"
+	test -x "./init" && ./init
+
+	if [ $# -ge 2 -a "$2" ]; then
+		test -d "$2" || (echo "Version $2 does not exists for project $1."; exit 2)
+		version="$2"
+		Version "$version"
+		cd "$version"
+		test -x "./init" && ./init || exit 0
+	fi
+else
+	project=$(ls --classify "$PROJECTSDIR" | grep "/$" | sed "s/.$//" | dmenu)
+	test "$project" || exit 0
+	test -d "$PROJECTSDIR/$project" || (echo "WTF No project named $project."; exit 1)
+
+	version=$(ls --classify "$PROJECTSDIR/$project" | grep "/$" | sed "s/.$//" | dmenu)
+	test -v "$version" || test -d "$PROJECTSDIR/$project/$version" || (echo "Version $version does not exists for project $project."; exit 2)
+
+	test $(Project) && bash -e unload
+
+	load "$project" "$version"
+fi

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PROJECTSDIR="$HOME/Projects"
+SCRIPTS="$PROJECTSDIR/.scripts"
+EDITOR="vim"
+
+PATH="$SCRIPTS:$PATH"
+
+export PROJECTSDIR
+export EDITOR
+export PATH
+
+test -x "$SCRIPTS/init" && source "$SCRIPTS/init"
