@@ -16,3 +16,5 @@ It allowed for setting up environment variables and configuring the whole system
 If everything was set up properly, once somebody wanted to use something, it was enough to copy/paste the directory into ~/Projects/ directory and call install.
 
 None the less, when I found git, I stopped using it.
+
+Read readme file for more information (it's an old file).
